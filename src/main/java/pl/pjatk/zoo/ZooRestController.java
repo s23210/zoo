@@ -10,17 +10,31 @@ import java.util.List;
 @RestController
 @RequestMapping("/zoo")
 public class ZooRestController {
+
+    private final ZooService zooService;
+
+    public ZooRestController(ZooService zooService) {
+        this.zooService = zooService;
+    }
+
     @GetMapping("/example")
     public ResponseEntity<Zoo> getExampleZoo() {
-        Animal dog = new Animal(1, "mammal", Diet.MEAT, Type.LAND, Health.HEALTHY, false);
-        List<Animal> animals = List.of(dog);
-        Zoo zoo = new Zoo(1, "Gdanskie zoo", "Gdansk", true, animals);
-        return ResponseEntity.ok(zoo);
+        return ResponseEntity.ok(zooService.getExampleZoo());
     }
 
     @GetMapping("/empty")
     public ResponseEntity<Zoo> getEmptyZoo() {
-        Zoo zoo = new Zoo(1, "Gdanskie zoo", "Gdansk", true, null);
-        return ResponseEntity.ok(zoo);
+        return ResponseEntity.ok(zooService.getEmptyZoo());
     }
+
+    @GetMapping("/emptyWithName")
+    public ResponseEntity<Zoo> getZooForName() {
+        return ResponseEntity.ok(zooService.getEmptyZooForName("Some example name"));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Zoo>> getAllZoos() {
+        return ResponseEntity.ok(zooService.getAllZoos());
+    }
+
 }
