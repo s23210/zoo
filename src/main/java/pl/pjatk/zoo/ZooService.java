@@ -31,14 +31,17 @@ public class ZooService {
     }
 
     public List<Zoo> getAllZoos() {
+        /*
         List<Zoo> allByIdGreaterThan = zooRepository.findAllByIdGreaterThan(5);
         return allByIdGreaterThan;
+         */
+        return zooRepository.findAll();
     }
 
     public Zoo findById(Integer id) {
         Optional<Zoo> byId = zooRepository.findById(id);
 
-        return byId.orElseThrow(RuntimeException::new);
+        return byId.orElse(null);
     }
 
     public void addAnimalToZoo(Zoo zoo, Animal animal) {
@@ -76,6 +79,15 @@ public class ZooService {
             animal.setDiet(diet);
         }
     }
+
+    public boolean zooExistById(Integer id) {
+        return zooRepository.existsById(id);
+    }
+
+    public void deleteZooById(Integer id) {
+        zooRepository.deleteById(id);
+    }
+
 }
 
 

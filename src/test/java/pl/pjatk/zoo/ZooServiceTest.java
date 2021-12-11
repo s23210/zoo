@@ -1,14 +1,29 @@
 package pl.pjatk.zoo;
 
+import org.hibernate.type.TrueFalseType;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 
+@ExtendWith(MockitoExtension.class)
 public class ZooServiceTest {
-    ZooService zooService = new ZooService(null);
+
+    @Mock
+    private ZooRepository zooRepository;
+
+    @InjectMocks
+    private ZooService zooService;
     @Test
     void shouldAddPrefixToName() {
         //GIVEN
@@ -120,4 +135,78 @@ public class ZooServiceTest {
         //THEN
         assertThat(animal.getDiet()).isNull();
     }
+
+    @Test
+    void shouldFindById() {
+        Mockito.when(zooRepository.findById(any()))
+                .thenReturn(Optional.of(new Zoo()));
+
+        Zoo byId = zooService.findById(1);
+
+        assertThat(byId).isNotNull();
+    }
+
+    @Test
+    void shouldNotFindById() {
+        Mockito.when(zooRepository.findById(any()))
+                .thenReturn(Optional.empty());
+
+        Zoo byId = zooService.findById(1);
+
+        assertThat(byId).isNull();
+    }
+
+    @Test
+    void shouldGetAllZoo() {
+        List<Zoo> zooList = List.of(new Zoo(), new Zoo());
+        Mockito.when(zooRepository.findAll())
+                .thenReturn(zooList);
+
+        List<Zoo> all = zooService.getAllZoos();
+
+        assertThat(all).hasSize(zooList.size());
+    }
+
+    @Test
+    void shouldGetEmptyZooList() {
+        List<Zoo> zooList = List.of();
+        Mockito.when(zooRepository.findAll())
+                .thenReturn(zooList);
+
+        List<Zoo> all = zooService.getAllZoos();
+
+        assertThat(all).isEmpty();
+    }
+
+    @Test
+    void shouldExistsById() {
+        Mockito.when(zooRepository.existsById(any()))
+                .thenReturn(true);
+
+        boolean exists = zooService.zooExistById(1);
+
+        assertThat(exists).isTrue();
+    }
+
+    @Test
+    void shouldNotExistsById() {
+        Mockito.when(zooRepository.existsById(any()))
+                .thenReturn(false);
+
+        boolean exists = zooService.zooExistById(1);
+
+        assertThat(exists).isFalse();
+    }
+
+    @Test
+    void shouldDeleteZooById() {
+        zooService.deleteZooById(1);
+
+        Mockito.verify(zooRepository).deleteById(any());
+    }
+
+    //shouldNotFindById -> repo zwraca nam Optional.empty()
+    //getAll -> co jak zwroci x elementow, co jak zwroci pusta liste
+    //zooExistsById -> co jak exists a co jak nie exists
+    //deleteZooById -> sprawdzic czy wywolane
 }
