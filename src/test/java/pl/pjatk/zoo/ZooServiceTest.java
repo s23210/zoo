@@ -204,9 +204,4 @@ public class ZooServiceTest {
 
         Mockito.verify(zooRepository).deleteById(any());
     }
-
-    //shouldNotFindById -> repo zwraca nam Optional.empty()
-    //getAll -> co jak zwroci x elementow, co jak zwroci pusta liste
-    //zooExistsById -> co jak exists a co jak nie exists
-    //deleteZooById -> sprawdzic czy wywolane
 }
