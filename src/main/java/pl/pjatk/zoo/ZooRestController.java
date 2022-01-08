@@ -1,10 +1,7 @@
 package pl.pjatk.zoo;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,8 +26,8 @@ public class ZooRestController {
     }
 
     @GetMapping("/emptyWithName")
-    public ResponseEntity<Zoo> getZooForName() {
-        return ResponseEntity.ok(zooService.getEmptyZooForName("Some example name"));
+    public ResponseEntity<Zoo> getZooForName(@RequestParam String name) {
+        return ResponseEntity.ok(zooService.getEmptyZooForName(name));
     }
 
     @GetMapping("/all")
