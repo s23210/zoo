@@ -8,5 +8,11 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface ZooRepository extends JpaRepository<Zoo, Integer> {
+    @Transactional
+    @Modifying
+    @Query("UPDATE Zoo z SET z.name = :name, z.isOpen = :isOpen where z.id = :id")
+    int updateZoo(String name, boolean isOpen, Integer id);
+
+    List<Zoo> findAllByOpenIsFalse();
     List<Zoo> findAllByIdGreaterThan(int id);
 }
