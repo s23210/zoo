@@ -13,6 +13,6 @@ public interface ZooRepository extends JpaRepository<Zoo, Integer> {
     @Query("UPDATE Zoo z SET z.name = :name, z.isOpen = :isOpen where z.id = :id")
     int updateZoo(String name, boolean isOpen, Integer id);
 
-    List<Zoo> findAllByOpenIsFalse();
+    List<Zoo> findAllByIsOpenIsFalse();
     List<Zoo> findAllByIdGreaterThan(int id);
 }
